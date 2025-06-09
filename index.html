@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estacionamento - Placas Mercosul</title>
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
+
+  <div class="card shadow p-4" style="width: 360px;">
+    <h1 class="card-title text-center mb-4 text-primary">Identificador de Placas e Estacionamento</h1>
+
+    <form id="form-estacionamento" autocomplete="off">
+      <div class="mb-3">
+        <label for="placa" class="form-label fw-bold">Placa (formato ABC1D23):</label>
+        <input type="text" class="form-control" id="placa" maxlength="7" />
+      </div>
+
+      <div class="mb-3">
+        <label for="entrada" class="form-label fw-bold">Horário de Entrada:</label>
+        <input type="time" class="form-control" id="entrada" />
+      </div>
+
+      <div class="mb-3">
+        <label for="saida" class="form-label fw-bold">Horário de Saída:</label>
+        <input type="time" class="form-control" id="saida" />
+      </div>
+
+      <div class="mb-3">
+        <label for="matricula" class="form-label fw-bold">Último dígito da matrícula:</label>
+        <input type="number" class="form-control" id="matricula" min="0" max="9" />
+      </div>
+
+      <button type="button" id="btn-calcular" class="btn btn-primary w-100 fw-bold">Calcular</button>
+    </form>
+
+    <div id="resultado" class="mt-4 alert alert-info d-none" role="alert"></div>
+  </div>
+
+  <!-- Bootstrap JS Bundle CDN (popper + bootstrap) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Seu script JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>
