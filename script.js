@@ -14,11 +14,18 @@ function calcular() {
     return;
   }
 
+  if (!entrada || !saida || isNaN(matriculaDigito)) {
+    resultadoDiv.className = 'alert alert-danger';
+    resultadoDiv.textContent = 'Preencha todos os campos corretamente.';
+    resultadoDiv.classList.remove('d-none');
+    return;
+  }
+
   const prefixo = placa.slice(0, 3);
 
   let estado = 'Outro';
   const prefixosAlagoas = ['NML', 'NMM', 'NMN', 'NMO', 'NMP', 'NMQ', 'NMR', 'NMS', 'NMT', 'NMU'];
-  const prefixosMatoGrossoSul = gerarIntervaloPrefixos('QAA', 'QEZ');
+  const prefixosMatoGrossoSul = gerarPrefixosMatoGrossoSul();
   const prefixosRoraima = ['NBR', 'NBS', 'NBT'];
 
   if (prefixosAlagoas.includes(prefixo)) {
@@ -53,7 +60,6 @@ function calcular() {
     preco = 10 + adicional;
   }
 
-  // Análise combinatória
   const combinacoesAlagoas = calcularCombinacoes(prefixosAlagoas);
   const combinacoesMS = calcularCombinacoes(prefixosMatoGrossoSul);
   const combinacoesRoraima = calcularCombinacoes(prefixosRoraima);
@@ -79,16 +85,12 @@ function horaParaMinutos(horaStr) {
   return h * 60 + m;
 }
 
-function gerarIntervaloPrefixos(inicio, fim) {
+function gerarPrefixosMatoGrossoSul() {
   const lista = [];
-  for (let i = 65; i <= 90; i++) {
-    for (let j = 65; j <= 90; j++) {
-      for (let k = 65; k <= 90; k++) {
-        const prefixo = String.fromCharCode(i) + String.fromCharCode(j) + String.fromCharCode(k);
-        if (prefixo >= inicio && prefixo <= fim) {
-          lista.push(prefixo);
-        }
-      }
+  const primeira = 'Q';
+  for (let segunda = 65; segunda <= 69; segunda++) { // A até E
+    for (let terceira = 65; terceira <= 90; terceira++) { // A até Z
+      lista.push(primeira + String.fromCharCode(segunda) + String.fromCharCode(terceira));
     }
   }
   return lista;
