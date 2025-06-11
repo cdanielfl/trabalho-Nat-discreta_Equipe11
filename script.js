@@ -53,11 +53,23 @@ function calcular() {
     preco = 10 + adicional;
   }
 
+  // Análise combinatória
+  const combinacoesAlagoas = calcularCombinacoes(prefixosAlagoas);
+  const combinacoesMS = calcularCombinacoes(prefixosMatoGrossoSul);
+  const combinacoesRoraima = calcularCombinacoes(prefixosRoraima);
+
   resultadoDiv.className = 'alert alert-success text-start';
   resultadoDiv.innerHTML = `
     <p><strong>Estado da placa:</strong> ${estado}</p>
     <p><strong>Tempo total:</strong> ${Math.floor(duracao / 60)}h ${duracao % 60}min</p>
     <p><strong>Valor a pagar:</strong> R$ ${preco.toFixed(2)}</p>
+    <hr>
+    <p><strong>Placas possíveis por estado:</strong></p>
+    <ul>
+      <li>Alagoas: ${combinacoesAlagoas.toLocaleString()} placas</li>
+      <li>Mato Grosso do Sul: ${combinacoesMS.toLocaleString()} placas</li>
+      <li>Roraima: ${combinacoesRoraima.toLocaleString()} placas</li>
+    </ul>
   `;
   resultadoDiv.classList.remove('d-none');
 }
@@ -69,7 +81,7 @@ function horaParaMinutos(horaStr) {
 
 function gerarIntervaloPrefixos(inicio, fim) {
   const lista = [];
-  for (let i = inicio.charCodeAt(0); i <= fim.charCodeAt(0); i++) {
+  for (let i = 65; i <= 90; i++) {
     for (let j = 65; j <= 90; j++) {
       for (let k = 65; k <= 90; k++) {
         const prefixo = String.fromCharCode(i) + String.fromCharCode(j) + String.fromCharCode(k);
@@ -80,4 +92,8 @@ function gerarIntervaloPrefixos(inicio, fim) {
     }
   }
   return lista;
+}
+
+function calcularCombinacoes(prefixos) {
+  return prefixos.length * 10 * 26 * 10 * 10;
 }
