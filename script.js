@@ -14,20 +14,9 @@ function calcular() {
     return;
   }
 
-  if (!entrada || !saida || isNaN(matriculaDigito)) {
-    resultadoDiv.className = 'alert alert-danger';
-    resultadoDiv.textContent = 'Preencha todos os campos corretamente.';
-    resultadoDiv.classList.remove('d-none');
-    return;
-  }
-
   const prefixo = placa.slice(0, 3);
 
   let estado = 'Outro';
-  const prefixosAlagoas = ['NML', 'NMM', 'NMN', 'NMO', 'NMP', 'NMQ', 'NMR', 'NMS', 'NMT', 'NMU'];
-  const prefixosMatoGrossoSul = gerarPrefixosMatoGrossoSul();
-  const prefixosRoraima = ['NBR', 'NBS', 'NBT'];
-
   if (prefixosAlagoas.includes(prefixo)) {
     estado = 'Alagoas';
   } else if (prefixosMatoGrossoSul.includes(prefixo)) {
@@ -60,9 +49,9 @@ function calcular() {
     preco = 10 + adicional;
   }
 
-  const combinacoesAlagoas = calcularCombinacoes(prefixosAlagoas);
-  const combinacoesMS = calcularCombinacoes(prefixosMatoGrossoSul);
-  const combinacoesRoraima = calcularCombinacoes(prefixosRoraima);
+  const combinacoesAlagoas = prefixosAlagoas.length * 10 * 26 * 10 * 10;
+  const combinacoesMS = prefixosMatoGrossoSul.length * 10 * 26 * 10 * 10;
+  const combinacoesRoraima = prefixosRoraima.length * 10 * 26 * 10 * 10;
 
   resultadoDiv.className = 'alert alert-success text-start';
   resultadoDiv.innerHTML = `
@@ -85,17 +74,45 @@ function horaParaMinutos(horaStr) {
   return h * 60 + m;
 }
 
-function gerarPrefixosMatoGrossoSul() {
-  const lista = [];
-  const primeira = 'Q';
-  for (let segunda = 65; segunda <= 69; segunda++) { // A até E
-    for (let terceira = 65; terceira <= 90; terceira++) { // A até Z
-      lista.push(primeira + String.fromCharCode(segunda) + String.fromCharCode(terceira));
+function gerarPrefixosEstado(intervalos) {
+  const prefixos = [];
+
+  function proximo(pref) {
+    let [a,b,c] = pref.split('').map(x => x.charCodeAt(0));
+    c++;
+    if (c > 90) { c = 65; b++; }
+    if (b > 90) { b = 65; a++; }
+    return String.fromCharCode(a,b,c);
+  }
+
+  for (const [start, end] of intervalos) {
+    let cur = start;
+    while (true) {
+      prefixos.push(cur);
+      if (cur === end) break;
+      cur = proximo(cur);
     }
   }
-  return lista;
+
+  return prefixos;
 }
 
-function calcularCombinacoes(prefixos) {
-  return prefixos.length * 10 * 26 * 10 * 10;
-}
+// Intervalos REAIS de prefixos
+
+const intervalosAlagoas = [
+  ['MUA','MVK'], ['NLV','NMO'], ['ORD','ORM'], ['QLA','QLM'], ['QTT','QTT'],
+  ['QWG','QWL'], ['RGO','RGZ'], ['SAA','SAJ'], ['TMH','TNQ'], ['OXN','OXN']
+];
+
+const intervalosMatoGrossoSul = [
+  ['HQF','HTW'], ['QAA','QAZ'], ['OOG','OOU'], ['SLW','SML'], ['RWA','RWJ']
+];
+
+const intervalosRoraima = [
+  ['NAH','NBA'], ['NUH','NUL'], ['RZA','RZD']
+];
+
+// Gerando prefixos válidos automaticamente
+const prefixosAlagoas = gerarPrefixosEstado(intervalosAlagoas);
+const prefixosMatoGrossoSul = gerarPrefixosEstado(intervalosMatoGrossoSul);
+const prefixosRoraima = gerarPrefixosEstado(intervalosRoraima);
